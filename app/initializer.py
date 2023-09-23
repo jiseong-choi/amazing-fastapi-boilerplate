@@ -11,6 +11,7 @@ def init(app: FastAPI):
     """
     init_routers(app)
     init_celery(app)
+    init_prisma(app)
 
 
 def init_routers(app: FastAPI):
@@ -30,6 +31,19 @@ def init_routers(app: FastAPI):
             tags=router.tags,
             responses=router.responses
         )
+
+
+def init_prisma(app: FastAPI):
+    @app.on_event("startup")
+    async def startup():
+        from app.core.database.prisma import prisma
+        await prisma.connect()
+
+    @app.on_event("shutdown")
+    async def shutdown():
+        from app.core.database.prisma import prisma
+        await prisma.disconnect()
+
 
 def init_celery(app: FastAPI):
     print("init_celery")

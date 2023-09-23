@@ -1,0 +1,9 @@
+generator client {
+  provider  = "prisma-client-py"
+  interface = "asyncio"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:root@localhost:3306/base"
+}
